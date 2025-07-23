@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="/css/admin_sidebar.css">
+
+<link rel="stylesheet"
+	href="/css/admin_faqs_design.css">
+
+
+<title>templates/admin/support/support_admin_notice.html</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+	<div th:replace="layout/admin_sidebar :: sidebar"></div>
+	<div class="parent-container"
+		style="border: none !important; width: 100%; height: 100%; padding-top: 30px; margin-bottom: 0px; padding-bottom: 0px; background: linear-gradient(to bottom, rgba(204, 169, 254, 0.8), rgba(204, 169, 254, 0.1), rgba(204, 169, 254, 0.1), white, transparent); border: none; padding-right: 320px; min-width: 1800px;">
+
+
+		<div th:replace="/support/admin/support_admin_submenu :: subMenu"></div>
+		
+
+		
+		<div class="child-div"
+			style="height: auto; width: 100%; box-shadow: 0 0 6px rgba(0, 0, 0, 0.4) !important; margin-left: 600px;">
+
+			<div class="title-div"
+				style="border-bottom: none; border: 1px solid none; margin-left: 20px; margin-bottom: 15px;">
+				<div class="div-1" style="flex:5; border:none">
+					<div class="div-2" style="font-size: 30px; border:none">
+						FAQ 관리
+					</div>
+				</div>
+			</div>
+			
+
+					<div class="child-div"
+						style="height: auto; box-shadow: none; margin-top: -10px; margin-left: 22px; width: 97%; box-shadow: 0 0 0px rgba(0, 0, 0, 0.0)">
+		
+						<div class="notice-header">
+							<div class="notice-cell" style="color: white; margin-left: 12px;">ID</div>
+							<div class="notice-cell" style="color: white; text-align: left;">제목</div>
+							<div class="notice-cell" style="color: white">조회수</div>
+							<div class="notice-cell" style="color: white">상태</div>
+						</div>
+						<div th:if="${#lists.isEmpty(faqList)}"
+							style="padding: 30px; font-size: 30px; color: #2e0070; opacity: 0.5; text-align: center;">
+							검색된 결과가 없습니다.</div>
+							
+		
+						<div class="notice-row row-bordered" style="z-index:9998; " th:each="faq : ${faqList}" th:attr="data-status=${faq.faq_status}">
+						
+						
+						<a th:href="@{/admin/support/faq/edit/{id}(id=${faq.faq_id})}" style="display: contents; ">
+											<div class="notice-cell" th:text="${faq.faq_id}"></div>
+									        <div class="notice-cell" th:text="${faq.faq_title}" style="text-align: left;"></div>
+									        <div class="notice-cell" th:text="${faq.faq_hits}" style="text-align: left; "></div>
+									        <div class="notice-cell notice-status"  th:text="${faq.faq_status}"></div>
+					    </a>
+					    
+						</div><!-- notice-row row-bordered -->
+		
+		
+		
+				</div>
+				<!-- child-div -->
+			
+
+		</div>
+		<!-- child-div -->
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+
+
+
+	</div>
+	<!-- parent-container -->
+
+</body>
+</html>
