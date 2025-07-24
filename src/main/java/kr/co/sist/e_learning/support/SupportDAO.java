@@ -28,6 +28,8 @@ public interface SupportDAO {
 
 	int updateNoticeStatusInactive(String id);// delete 대체=비활성(완료)
 
+	int updateFaqStatusInactive(String id);// delete 대체=비활성(완료)
+
 	int updateNoticeStatusActive(String id);// delete 대체=활성(완료)
 
 	NoticeDTO selectOneNoticeById(String id);
@@ -89,7 +91,7 @@ public interface SupportDAO {
 	int selectMaxFaqHits();
 
 	int selectMaxFeedbackSends();
-	
+
 	List<FaqDTO> selectFaqsByKeyword(String keyword);
 
 }

@@ -103,7 +103,7 @@ public class SupportDAOImpl implements SupportDAO {
 		List<NoticeDTO> resultList = new ArrayList<>();
 //		String sql = "SELECT * FROM notice ORDER BY notice_created_date DESC";
 //		String sql = "SELECT * FROM notice ORDER BY notice_fix_flag ASC, notice_created_date DESC";
-		String sql = "SELECT * FROM notice ORDER BY notice_id DESC";
+		String sql = "SELECT * FROM notice WHERE notice_status = 'A' ORDER BY notice_id DESC ";
 
 		try (Connection conn = getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql);
@@ -202,6 +202,24 @@ public class SupportDAOImpl implements SupportDAO {
 		int result = 0;
 //		String sql = "UPDATE notice SET notice_status = 'I', notice_last_modified_date = SYSDATE WHERE notice_id = ?";
 		String sql = "UPDATE notice SET notice_status = 'I' WHERE notice_id = ?";
+
+		try (Connection conn = getConnection()) {
+			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+				stmt.setString(1, notice_id);
+				result = stmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	@Override
+	public int updateFaqStatusInactive(String notice_id) {
+		int result = 0;
+//		String sql = "UPDATE notice SET notice_status = 'I', notice_last_modified_date = SYSDATE WHERE notice_id = ?";
+		String sql = "UPDATE faq SET faq_status = 'I' WHERE faq_id = ?";
 
 		try (Connection conn = getConnection()) {
 			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -403,7 +421,8 @@ public class SupportDAOImpl implements SupportDAO {
 		String sql = "SELECT " + "f.faq_id, " + "f.faqtype_id, "
 				+ "NVL(f.faqtype_name, t.faqtype_name) AS faqtype_name, " + "f.faq_title, " + "f.faq_content, "
 				+ "f.faq_created_date, " + "f.faq_hits, " + "f.faq_last_modified_date, " + "f.faq_status "
-				+ "FROM faq f " + "LEFT JOIN faqtype t ON f.faqtype_id = t.faqtype_id " + "ORDER BY f.faq_id ASC";
+				+ "FROM faq f " + "LEFT JOIN faqtype t ON f.faqtype_id = t.faqtype_id " + "WHERE faq_status = 'A' "
+				+ "ORDER BY f.faq_id ASC";
 
 		try (Connection conn = getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql);
@@ -466,14 +485,13 @@ public class SupportDAOImpl implements SupportDAO {
 	@Override
 	public int updateFaqById(FaqDTO faq) {
 		int result = 0;
-		String sql = "UPDATE faq SET faq_title = ?, faq_content = ?, faq_status = ? WHERE faq_id = ?";
+		String sql = "UPDATE faq SET faq_title = ?, faq_content = ? WHERE faq_id = ?";
 
 		try (Connection conn = getConnection()) {
 			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 				stmt.setString(1, faq.getFaq_title());
 				stmt.setString(2, faq.getFaq_content());
-				stmt.setString(3, faq.getFaq_status());
-				stmt.setString(4, faq.getFaq_id());
+				stmt.setString(3, faq.getFaq_id());
 
 				result = stmt.executeUpdate();
 			}
@@ -1088,14 +1106,13 @@ public class SupportDAOImpl implements SupportDAO {
 
 		return maxSends;
 	}
-	
+
 	@Override
 	public List<FaqDTO> selectFaqsByKeyword(String keyword) {
 		List<FaqDTO> list = new ArrayList<>();
 		String sql = "SELECT faq_id, faq_title, faq_hits FROM faq WHERE faq_title LIKE ?";
 
-		try (Connection conn = getConnection();
-			 PreparedStatement stmt = conn.prepareStatement(sql)) {
+		try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
 			stmt.setString(1, "%" + keyword + "%");
 
@@ -1114,6 +1131,5 @@ public class SupportDAOImpl implements SupportDAO {
 
 		return list;
 	}
-
 
 }

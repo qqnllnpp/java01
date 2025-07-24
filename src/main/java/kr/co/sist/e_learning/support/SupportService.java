@@ -24,6 +24,7 @@ public interface SupportService {
 
 	public List<FeedbackDTO> searchTotalFeedback();// 전체 Feedback 조회
 
+	public int editFaqStatusInactive(String id);
 	// ---------------------------------------------------------------------
 
 	public NoticeDTO searchOneNotice(String id);// 상세 Notice 조회

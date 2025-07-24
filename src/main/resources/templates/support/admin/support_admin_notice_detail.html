@@ -22,7 +22,9 @@
 		border:none; padding-right: 320px; min-width: 1800px; 
 		">
 
+	<div class="child-div" style="height: auto; width: 100%; box-shadow: none; margin-left: 600px; background-color: transparent; border:none !important;">
 		<div th:replace="/support/admin/support_admin_submenu :: subMenu"></div>
+	</div><!-- child-div -->
 		
 	
 		
@@ -164,16 +166,9 @@
 
 <!-- 					</div> -->
 
-<th:block th:if="${notice.notice_status} == 'A' ">
-				<form th:action="@{/admin/support/notice/delete/{id}(id=${notice.notice_id})}" method="post" onsubmit="return confirm('해당 공지를 게시 중지할까요?')">
-				    <input type="submit" value="게시 중지" class="noticeDeleteButton"  />
+				<form th:action="@{/admin/support/notice/delete/{id}(id=${notice.notice_id})}" method="post" onsubmit="return confirm('해당 공지를 삭제할까요?')">
+				    <input type="submit" value="삭제" class="noticeDeleteButton"  />
 				</form>
-</th:block>
-<th:block th:if="${notice.notice_status} == 'I' ">
-				<form th:action="@{/admin/support/notice/active/{id}(id=${notice.notice_id})}" method="post" onsubmit="return confirm('해당 공지를 다시 게시할까요?')">
-				    <input type="submit" value="다시 게시" class="noticeDeleteButton" style="background-color: #0184d0"  />
-				</form>
-</th:block>
 				<form th:action="@{/admin/support/notice/edit/{id}(id=${notice.notice_id})}">
 				    <input type="submit" value="수정" class="noticeEditButton"  />
 				</form>

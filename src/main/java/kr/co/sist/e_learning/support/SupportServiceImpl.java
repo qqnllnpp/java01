@@ -161,6 +161,11 @@ public class SupportServiceImpl extends SupportServiceAbstract {
 	}
 
 	@Override
+	public int editFaqStatusInactive(String id) {
+		return sDAO.updateFaqStatusInactive(id);
+	}
+
+	@Override
 	public int editNoticeStatusActive(String id) {
 		return sDAO.updateNoticeStatusActive(id);
 	}
@@ -370,10 +375,9 @@ public class SupportServiceImpl extends SupportServiceAbstract {
 	public int searchMaxFeedbackSends() {
 		return sDAO.selectMaxFeedbackSends();
 	};
-	
+
 	public List<FaqDTO> findFaqsByKeyword(String keyword) {
 		return sDAO.selectFaqsByKeyword(keyword);
 	}
-
 
 }

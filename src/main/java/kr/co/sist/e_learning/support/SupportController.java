@@ -212,7 +212,7 @@ public class SupportController {
 		} else {
 			redirectAttributes.addFlashAttribute("error", "공지사항 수정에 실패했습니다.");
 		}
-		return "redirect:/support/admin/notice/" + id;
+		return "redirect:/admin/support/notice/" + id;
 	}
 
 	// 공지사항 비활성
@@ -259,6 +259,92 @@ public class SupportController {
 	@GetMapping("/admin/support/faq")
 	public String supportFaqDetailAdmin(Model model) {
 
+		// ---------------
+
+		List<FaqDTO> graphData2 = supportService.searchAllFaqDTO();
+		List<String> faqLabels = new ArrayList<>();
+		List<Integer> faqHits = new ArrayList<>();
+
+		for (FaqDTO dto : graphData2) {
+			faqLabels.add(dto.getFaq_id());
+			faqHits.add(dto.getFaq_hits()); // 조회수
+		}
+		model.addAttribute("faqChartLabels", faqLabels);
+		model.addAttribute("faqChartValues", faqHits);
+
+		// ---------------
+
+		Map<String, Integer> type1Data = new LinkedHashMap<>();
+		List<FaqDTO> faqList01 = supportService.searchAllFaqDTO();
+		for (FaqDTO dto : faqList01) {
+			if ("강좌".equals(dto.getFaqtype_name())) {
+				String faqId = dto.getFaq_title();
+				int hits = dto.getFaq_hits();
+				type1Data.put(faqId, hits);
+			}
+		}
+		model.addAttribute("type1Data", type1Data);
+
+		Map<String, Integer> type2Data = new LinkedHashMap<>();
+		List<FaqDTO> faqList02 = supportService.searchAllFaqDTO();
+		for (FaqDTO dto : faqList02) {
+			if ("학습".equals(dto.getFaqtype_name())) {
+				String faqId = dto.getFaq_title();
+				int hits = dto.getFaq_hits();
+				type2Data.put(faqId, hits);
+			}
+		}
+		model.addAttribute("type2Data", type2Data);
+
+		Map<String, Integer> type3Data = new LinkedHashMap<>();
+		List<FaqDTO> faqList03 = supportService.searchAllFaqDTO();
+		for (FaqDTO dto : faqList03) {
+			if ("결제".equals(dto.getFaqtype_name())) {
+				String faqId = dto.getFaq_title();
+				int hits = dto.getFaq_hits();
+				type3Data.put(faqId, hits);
+			}
+		}
+		model.addAttribute("type3Data", type3Data);
+
+		Map<String, Integer> type4Data = new LinkedHashMap<>();
+		List<FaqDTO> faqList04 = supportService.searchAllFaqDTO();
+		for (FaqDTO dto : faqList04) {
+			if ("계정".equals(dto.getFaqtype_name())) {
+				String faqId = dto.getFaq_title();
+				int hits = dto.getFaq_hits();
+				type4Data.put(faqId, hits);
+			}
+		}
+		model.addAttribute("type4Data", type4Data);
+
+		Map<String, Integer> type5Data = new LinkedHashMap<>();
+		List<FaqDTO> faqList05 = supportService.searchAllFaqDTO();
+		for (FaqDTO dto : faqList05) {
+			if ("기타".equals(dto.getFaqtype_name())) {
+				String faqId = dto.getFaq_title();
+				int hits = dto.getFaq_hits();
+				type5Data.put(faqId, hits);
+			}
+		}
+		model.addAttribute("type5Data", type5Data);
+
+		Map<String, Integer> type6Data = new LinkedHashMap<>();
+		List<FaqDTO> faqList06 = supportService.searchAllFaqDTO();
+		for (FaqDTO dto : faqList06) {
+			if ("기능".equals(dto.getFaqtype_name())) {
+				String faqId = dto.getFaq_title();
+				int hits = dto.getFaq_hits();
+				type6Data.put(faqId, hits);
+			}
+		}
+		model.addAttribute("type6Data", type6Data);
+
+		// ---------------
+
+		int maxHits = supportService.searchMaxFaqHits();
+		model.addAttribute("maxHits", maxHits);
+
 		List<FaqDTO> faqList = supportService.searchAllFaq();
 		model.addAttribute("faqList", faqList);
 		return "support/admin/support_admin_faq";
@@ -280,6 +366,18 @@ public class SupportController {
 		return "support/admin/support_admin_faq_detail_edit";
 	}
 
+	// FAQ 추가 페이지 : support_admin_faq_detail_add.html
+	@GetMapping("/admin/support/faq/add")
+	public String addfaqAdminPage() {
+		return "support/admin/support_admin_faq_detail_add";
+	}
+
+	// 공지사항 추가 페이지 : support_admin_faq_detail_add.html
+	@GetMapping("/admin/support/notice/add")
+	public String addNoticeAdminPage() {
+		return "support/admin/support_admin_notice_detail_add";
+	}
+
 	// FAQ 수정
 	@PostMapping("/admin/support/faq/update/{id}")
 	public String updateFaq(@PathVariable("id") String id, FaqDTO faq, RedirectAttributes redirectAttributes) {
@@ -294,6 +392,13 @@ public class SupportController {
 		return "redirect:/admin/support/faq";
 	}
 
+	// FAQ 비활성
+	@PostMapping("/admin/support/faq/delete/{id}")
+	public String deleteFaqAdmin(@PathVariable("id") String id) {
+		supportService.editFaqStatusInactive(id);
+		return "redirect:/admin/support/faq";
+	}
+
 	// ---------------------------------------------------------------------------------------------
 
 	// 관련 통계 : support_admin_total.html
@@ -301,8 +406,6 @@ public class SupportController {
 	public String supportAdminTotal(Model model) {
 
 		Map<String, Integer> typeCountMap = new HashMap<>();
-//		List<FeedbackDTO> graphData = supportService.searchAllNewFeedback();
-//		List<FeedbackDTO> graphData = supportService.searchAllFeedback();
 		List<FeedbackDTO> graphData = supportService.searchTotalFeedback();
 		for (FeedbackDTO dto : graphData) {
 			String type = dto.getFeedback_type(); // 예: "결제", "강좌"
@@ -425,6 +528,37 @@ public class SupportController {
 	// 신규/진행 피드백 조회 : support_admin_feedback.html
 	@GetMapping("/admin/support/feedback")
 	public String supportAdminFeedback(Model model) {
+
+		Map<String, Integer> typeCountMap = new HashMap<>();
+		List<FeedbackDTO> graphData = supportService.searchTotalFeedback();
+		for (FeedbackDTO dto : graphData) {
+			String type = dto.getFeedback_type(); // 예: "결제", "강좌"
+
+			if (type.equals("3000")) {
+				type = "결제";
+			}
+			if (type.equals("3001")) {
+				type = "강좌";
+			}
+			if (type.equals("3002")) {
+				type = "학습";
+			}
+			if (type.equals("3003")) {
+				type = "계정";
+			}
+			if (type.equals("3004")) {
+				type = "기타";
+			}
+			if (type.equals("3005")) {
+				type = "기능";
+			}
+
+			typeCountMap.put(type, typeCountMap.getOrDefault(type, 0) + 1);
+		}
+		model.addAttribute("feedbackChartData", typeCountMap);
+
+		int maxSends = supportService.searchMaxFeedbackSends();
+		model.addAttribute("maxSends", maxSends);
 
 		List<FeedbackDTO> newFeedbackList = supportService.searchAllNewFeedback();
 		List<FeedbackDTO> niceFeedbackList = supportService.searchAllNiceFeedback();

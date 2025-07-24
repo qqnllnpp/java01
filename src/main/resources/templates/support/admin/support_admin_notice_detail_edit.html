@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,9 @@
 		border:none; padding-right: 320px; min-width: 1800px; 
 		">
 
+	<div class="child-div" style="height: auto; width: 100%; box-shadow: none; margin-left: 600px; background-color: transparent; border:none !important;">
 		<div th:replace="/support/admin/support_admin_submenu :: subMenu"></div>
+	</div><!-- child-div -->
 		
 	
 		
@@ -123,6 +125,13 @@
 	                <input type="text" id="notice_title" name="notice_title" th:value="${notice.notice_title}"
 	                       placeholder="공지사항 제목을 입력하세요" style="width: 100%; padding: 10px; font-size: 20px; border: 1px solid #ccc; border-radius: 4px;" />
 	            </div>
+	            
+	            <!-- 제목 -->
+	            <div class="detailDivs">
+	                <label for="notice_writer" style="color: #5701d0;">공지사항 작성자</label><br>
+	                <input type="text" id="notice_writer" name="notice_writer" th:value="${notice.notice_writer}"
+	                       placeholder="공지사항 작성자를 입력하세요" style="width: 100%; padding: 10px; font-size: 20px; border: 1px solid #ccc; border-radius: 4px;" />
+	            </div>
 	
 	            <!-- 내용 -->
 	            <div class="detailDivs">
@@ -131,25 +140,25 @@
 	                          th:text="${notice.notice_content}"></textarea> 
 	            </div>
 
-	            <!-- 고정 여부 -->
-	            <div class="detailDivs">
-	                <label for="notice_fix_flag" style="color: #5701d0;">공지 고정 여부</label><br>
-	                <select name="notice_fix_flag" id="notice_fix_flag"
-	                        style="width: 50%; padding: 10px; font-size: 18px; border-radius: 4px;">
-	                    <option value="Y" th:selected="${notice.notice_fix_flag == 'Y'}">고정</option>
-	                    <option value="N" th:selected="${notice.notice_fix_flag == 'N'}">고정 안함</option>
-	                </select>
-	            </div>
+<!-- 	            고정 여부 -->
+<!-- 	            <div class="detailDivs"> -->
+<!-- 	                <label for="notice_fix_flag" style="color: #5701d0;">공지 고정 여부</label><br> -->
+<!-- 	                <select name="notice_fix_flag" id="notice_fix_flag" -->
+<!-- 	                        style="width: 50%; padding: 10px; font-size: 18px; border-radius: 4px;"> -->
+<!-- 	                    <option value="Y" th:selected="${notice.notice_fix_flag == 'Y'}">고정</option> -->
+<!-- 	                    <option value="N" th:selected="${notice.notice_fix_flag == 'N'}">고정 안함</option> -->
+<!-- 	                </select> -->
+<!-- 	            </div> -->
 	
-	            <!-- 상태 -->
-	            <div class="detailDivs">
-	                <label for="notice_status" style="color: #5701d0;">상태</label><br>
-	                <select name="notice_status" id="notice_status"
-	                        style="width: 50%; padding: 10px; font-size: 18px; border-radius: 4px;">
-	                    <option value="A" th:selected="${notice.notice_status == 'A'}">게시 중</option>
-	                    <option value="I" th:selected="${notice.notice_status == 'I'}">게시 중지</option>
-	                </select>
-	            </div>
+<!-- 	            상태 -->
+<!-- 	            <div class="detailDivs"> -->
+<!-- 	                <label for="notice_status" style="color: #5701d0;">상태</label><br> -->
+<!-- 	                <select name="notice_status" id="notice_status" -->
+<!-- 	                        style="width: 50%; padding: 10px; font-size: 18px; border-radius: 4px;"> -->
+<!-- 	                    <option value="A" th:selected="${notice.notice_status == 'A'}">게시 중</option> -->
+<!-- 	                    <option value="I" th:selected="${notice.notice_status == 'I'}">게시 중지</option> -->
+<!-- 	                </select> -->
+<!-- 	            </div> -->
 	            
 <!-- 	        </div> -->
 
@@ -238,9 +247,9 @@
             <!-- 버튼 영역 -->
             <div style="margin-top: -20px; text-align: right;">
                 <button type="submit" class="noticeEditButton">수정 완료</button>
+        </form>
                 <a th:href="@{/admin/support/notice/{id}(id=${notice.notice_id})}" class="noticeDeleteButton" style="margin-left: 20px; background-color: #aaaaaa">취소</a>
             </div>
-        </form>
         
 
 
